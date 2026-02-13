@@ -2,22 +2,36 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forever Jeyasri ❤️</title>
 
 <style>
 body{
 margin:0;
-font-family: 'Segoe UI', sans-serif;
-background: linear-gradient(135deg,#ff9aa2,#ff4e8c);
-text-align:center;
-color:white;
-overflow-x:hidden;
+font-family:'Segoe UI',sans-serif;
+overflow:hidden;
 }
 
-.hidden{display:none;}
+.section{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+padding:20px;
+box-sizing:border-box;
+}
 
-h1{font-size:2.5rem;}
-h2{font-size:2rem;}
+/* BLACK INTRO */
+#intro{
+background:black;
+color:white;
+display:flex;
+}
 
 button{
 padding:12px 25px;
@@ -32,35 +46,27 @@ transition:0.3s;
 .red{background:#ff1744;color:white;}
 .white{background:white;color:black;}
 
-button:hover{
-transform:scale(1.05);
-}
-
-/* BLACK INTRO */
-#intro{
-background:black;
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-}
+button:hover{transform:scale(1.05);}
 
 /* YES NO PAGE */
-#yesNoPage{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
+#yesno{
+background:linear-gradient(135deg,#ff9aa2,#ff4e8c);
+color:white;
+display:none;
 }
 
-/* GIFTS */
+/* GIFT PAGE */
+#gifts{
+background:linear-gradient(135deg,#ff9aa2,#ff4e8c);
+color:white;
+display:none;
+}
+
 .gift-container{
 display:flex;
 justify-content:center;
 gap:40px;
-margin-top:50px;
+margin-top:40px;
 flex-wrap:wrap;
 }
 
@@ -78,21 +84,31 @@ font-weight:bold;
 }
 
 /* QUIZ */
+#quiz{
+background:#ffe6f0;
+color:black;
+display:none;
+}
+
 .options button{
 background:white;
 color:black;
 }
 
 /* SLIDESHOW */
-.slideshow{
-margin-top:20px;
+#slideshow{
+background:black;
+color:white;
+display:none;
+}
+
+.slideshow-box{
 background:black;
 padding:30px;
 border-radius:20px;
-display:inline-block;
 }
 
-.slideshow img{
+.slideshow-box img{
 width:300px;
 border-radius:20px;
 animation:fade 4s infinite;
@@ -111,6 +127,12 @@ font-size:1rem;
 }
 
 /* SECRET */
+#secret{
+background:radial-gradient(circle,#ff4d6d,#990033);
+color:white;
+display:none;
+}
+
 input{
 padding:10px;
 border-radius:10px;
@@ -147,9 +169,7 @@ to{transform:translateY(100vh) rotate(720deg);}
 
 /* RESPONSIVE */
 @media(max-width:600px){
-h1{font-size:1.8rem;}
-h2{font-size:1.5rem;}
-.slideshow img{width:90%;}
+.slideshow-box img{width:90%;}
 .gift-box{font-size:50px;}
 }
 </style>
@@ -159,21 +179,21 @@ h2{font-size:1.5rem;}
 
 <audio id="bgSong" src="song.mp3"></audio>
 
-<!-- BLACK INTRO -->
-<div id="intro">
+<!-- INTRO -->
+<div id="intro" class="section">
 <h1>“I built something for you…” 💌</h1>
-<button class="red" onclick="showYesNo()">Click to Continue ❤️</button>
+<button class="red" onclick="go('yesno')">Click to Continue ❤️</button>
 </div>
 
-<!-- YES NO PAGE -->
-<div id="yesNoPage" class="hidden">
+<!-- YES NO -->
+<div id="yesno" class="section">
 <h2>Will you be mine? 😘</h2>
-<button class="red" onclick="startSite()">YES ❤️</button>
+<button class="red" onclick="go('gifts')">YES ❤️</button>
 <button class="white" id="noBtn">NO 🙄</button>
 </div>
 
-<!-- GIFT PAGE -->
-<div id="giftPage" class="hidden">
+<!-- GIFTS -->
+<div id="gifts" class="section">
 <h2>Choose Your Surprise 🎁</h2>
 <div class="gift-container">
 <div class="gift-box" onclick="openGift(1)">🎁<p>Gift 1</p></div>
@@ -183,29 +203,29 @@ h2{font-size:1.5rem;}
 </div>
 
 <!-- QUIZ -->
-<div id="quizPage" class="hidden">
+<div id="quiz" class="section">
 <h2>Unaku yara romba romba pudikum? 😌</h2>
 <div class="options">
 <button onclick="wrong()">Amma</button>
 <button onclick="wrong()">Appa</button>
-<button onclick="correct()">Hubby (Lalchand 😎)</button>
+<button onclick="correct()">Hubby</button>
 </div>
 <p id="quizResult"></p>
-<button id="nextBtn" class="red hidden" onclick="showGifts()">Next ❤️</button>
+<button id="nextBtn" class="red" style="display:none;" onclick="go('gifts')">Next ❤️</button>
 </div>
 
 <!-- SLIDESHOW -->
-<div id="slidePage" class="hidden">
+<div id="slideshow" class="section">
 <h2>Our Memories 🖤</h2>
-<div class="slideshow">
+<div class="slideshow-box">
 <img id="slideImg" src="photo1.JPG">
 <div class="memory" id="memoryText"></div>
 </div>
-<button class="red" onclick="showGifts()">Back 🎁</button>
+<button class="red" onclick="go('gifts')">Back 🎁</button>
 </div>
 
 <!-- SECRET -->
-<div id="secretPage" class="hidden">
+<div id="secret" class="section">
 <h2>Enter Secret Code 🔐</h2>
 <input type="text" id="secretInput">
 <button class="red" onclick="checkCode()">Submit</button>
@@ -213,31 +233,43 @@ h2{font-size:1.5rem;}
 <div id="letter" class="letter">
 <h3>My Love 💖</h3>
 <p>
-From 22.11.2020 the day I first saw you,
-my world changed forever.
-20.7.2022 — the day I proposed,
-5.9.2022 — our first selfie,
-Every memory with you is priceless.
-Forever yours,
-Lalchand ❤️
+From the moment you came into my life,  
+everything started feeling more beautiful. ❤️  
+
+Your smile is my peace,  
+your voice is my comfort,  
+and your love is my biggest strength.  
+
+You are not just someone I love…  
+you are my safe place, my happiness,  
+and the future I dream about every day. 💭💖  
+
+No matter what happens in life,  
+I will always choose you.  
+Every single time.  
+
+You are my today,  
+my tomorrow,  
+and my forever. 💍❤️  
+
+Forever yours,  
+Lalchand 💖
+
 </p>
 </div>
 
-<button class="red" onclick="showGifts()">Back 🎁</button>
+<button class="red" onclick="go('gifts')">Back 🎁</button>
 </div>
 
 <script>
 
-function showYesNo(){
-document.getElementById("intro").classList.add("hidden");
-document.getElementById("yesNoPage").classList.remove("hidden");
+/* PAGE NAVIGATION */
+function go(page){
+document.querySelectorAll('.section').forEach(sec=>sec.style.display='none');
+document.getElementById(page).style.display='flex';
 }
 
-function startSite(){
-document.getElementById("yesNoPage").classList.add("hidden");
-document.getElementById("giftPage").classList.remove("hidden");
-}
-
+/* NO ESCAPE */
 let noBtn=document.getElementById("noBtn");
 noBtn.addEventListener("mouseover",()=>{
 noBtn.style.position="absolute";
@@ -247,37 +279,22 @@ noBtn.style.top=Math.random()*80+"%";
 
 /* GIFT OPEN */
 function openGift(n){
-document.getElementById("giftPage").classList.add("hidden");
-
 if(n==1){
-document.getElementById("quizPage").classList.remove("hidden");
+go('quiz');
 document.getElementById("bgSong").play();
 }
-
-if(n==2){
-document.getElementById("slidePage").classList.remove("hidden");
+if(n==2){ go('slideshow'); }
+if(n==3){ go('secret'); }
 }
 
-if(n==3){
-document.getElementById("secretPage").classList.remove("hidden");
-}
-}
-
+/* QUIZ */
 function wrong(){
 document.getElementById("quizResult").innerHTML="Wrong da 😂 Try again!";
 }
-
 function correct(){
 document.getElementById("quizResult").innerHTML="Correcttt 😍";
-document.getElementById("nextBtn").classList.remove("hidden");
+document.getElementById("nextBtn").style.display="inline-block";
 launchConfetti();
-}
-
-function showGifts(){
-document.getElementById("quizPage").classList.add("hidden");
-document.getElementById("slidePage").classList.add("hidden");
-document.getElementById("secretPage").classList.add("hidden");
-document.getElementById("giftPage").classList.remove("hidden");
 }
 
 /* SLIDESHOW */
@@ -289,15 +306,15 @@ let memories=[
 ];
 
 let i=0;
-
 setInterval(()=>{
 i=(i+1)%images.length;
 document.getElementById("slideImg").src=images[i];
 document.getElementById("memoryText").innerHTML=memories[i];
 },4000);
 
+/* SECRET */
 function checkCode(){
-let code=document.getElementById("secretInput").value.toLowerCase();
+let code=document.getElementById("secretInput(nama adikadi soli kupidura wordoda love you add panniko)").value.toLowerCase();
 if(code=="love you laddu"){
 document.getElementById("letter").classList.add("showLetter");
 launchConfetti();
@@ -307,6 +324,7 @@ alert("Wrong secret 😜");
 }
 }
 
+/* CONFETTI */
 function launchConfetti(){
 for(let i=0;i<60;i++){
 let c=document.createElement("div");
@@ -319,5 +337,6 @@ setTimeout(()=>{c.remove();},3000);
 }
 
 </script>
+
 </body>
 </html>
