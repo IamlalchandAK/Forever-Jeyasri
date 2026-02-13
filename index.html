@@ -16,60 +16,76 @@ overflow-x:hidden;
 
 .hidden{display:none;}
 
-h1,h2{margin:20px;}
+h1{font-size:2.5rem;}
+h2{font-size:2rem;}
 
 button{
-padding:10px 20px;
+padding:12px 25px;
 border:none;
-border-radius:25px;
+border-radius:30px;
 cursor:pointer;
-font-size:16px;
+font-size:1rem;
 margin:10px;
+transition:0.3s;
 }
 
 .red{background:#ff1744;color:white;}
 .white{background:white;color:black;}
 
+button:hover{
+transform:scale(1.05);
+}
+
+/* BLACK INTRO */
+#intro{
+background:black;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+/* YES NO PAGE */
+#yesNoPage{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+/* GIFTS */
 .gift-container{
 display:flex;
 justify-content:center;
-gap:80px;
+gap:40px;
 margin-top:50px;
+flex-wrap:wrap;
 }
 
 .gift-box{
-font-size:70px;
+font-size:60px;
 cursor:pointer;
 transition:0.4s;
 }
 .gift-box:hover{
-transform:scale(1.2) rotate(8deg);
+transform:scale(1.2) rotate(6deg);
 }
 .gift-box p{
-font-size:18px;
-margin-top:10px;
+font-size:1rem;
 font-weight:bold;
 }
 
+/* QUIZ */
 .options button{
 background:white;
 color:black;
 }
 
-.shake{
-animation:shake 0.4s;
-}
-@keyframes shake{
-0%{transform:translateX(0);}
-25%{transform:translateX(-6px);}
-50%{transform:translateX(6px);}
-75%{transform:translateX(-6px);}
-100%{transform:translateX(0);}
-}
-
-/* BLACK FADE SLIDESHOW */
+/* SLIDESHOW */
 .slideshow{
-margin-top:30px;
+margin-top:20px;
 background:black;
 padding:30px;
 border-radius:20px;
@@ -89,6 +105,12 @@ animation:fade 4s infinite;
 100%{opacity:0;transform:scale(1.05);}
 }
 
+.memory{
+margin-top:15px;
+font-size:1rem;
+}
+
+/* SECRET */
 input{
 padding:10px;
 border-radius:10px;
@@ -110,6 +132,7 @@ transition:1s;
 opacity:1;
 }
 
+/* CONFETTI */
 .confetti{
 position:fixed;
 width:10px;
@@ -121,6 +144,14 @@ animation:fall 3s linear infinite;
 @keyframes fall{
 to{transform:translateY(100vh) rotate(720deg);}
 }
+
+/* RESPONSIVE */
+@media(max-width:600px){
+h1{font-size:1.8rem;}
+h2{font-size:1.5rem;}
+.slideshow img{width:90%;}
+.gift-box{font-size:50px;}
+}
 </style>
 </head>
 
@@ -128,10 +159,17 @@ to{transform:translateY(100vh) rotate(720deg);}
 
 <audio id="bgSong" src="song.mp3"></audio>
 
-<!-- INTRO -->
+<!-- BLACK INTRO -->
 <div id="intro">
 <h1>“I built something for you…” 💌</h1>
-<button class="red" onclick="startSite()">Click to Continue ❤️</button>
+<button class="red" onclick="showYesNo()">Click to Continue ❤️</button>
+</div>
+
+<!-- YES NO PAGE -->
+<div id="yesNoPage" class="hidden">
+<h2>Will you be mine? 😘</h2>
+<button class="red" onclick="startSite()">YES ❤️</button>
+<button class="white" id="noBtn">NO 🙄</button>
 </div>
 
 <!-- GIFT PAGE -->
@@ -144,7 +182,7 @@ to{transform:translateY(100vh) rotate(720deg);}
 </div>
 </div>
 
-<!-- QUIZ PAGE -->
+<!-- QUIZ -->
 <div id="quizPage" class="hidden">
 <h2>Unaku yara romba romba pudikum? 😌</h2>
 <div class="options">
@@ -156,29 +194,31 @@ to{transform:translateY(100vh) rotate(720deg);}
 <button id="nextBtn" class="red hidden" onclick="showGifts()">Next ❤️</button>
 </div>
 
-<!-- SLIDESHOW PAGE -->
+<!-- SLIDESHOW -->
 <div id="slidePage" class="hidden">
 <h2>Our Memories 🖤</h2>
 <div class="slideshow">
 <img id="slideImg" src="photo1.JPG">
+<div class="memory" id="memoryText"></div>
 </div>
 <button class="red" onclick="showGifts()">Back 🎁</button>
 </div>
 
-<!-- SECRET PAGE -->
+<!-- SECRET -->
 <div id="secretPage" class="hidden">
 <h2>Enter Secret Code 🔐</h2>
-<input type="text" id="secretInput" placeholder="Type here...">
+<input type="text" id="secretInput">
 <button class="red" onclick="checkCode()">Submit</button>
 
 <div id="letter" class="letter">
 <h3>My Love 💖</h3>
 <p>
-From the first moment I saw you, my life changed forever.  
-You are my happiness, my peace, my everything.  
-No matter what happens, I will always choose you.  
-Thank you for loving me endlessly.  
-Forever yours,  
+From 22.11.2020 the day I first saw you,
+my world changed forever.
+20.7.2022 — the day I proposed,
+5.9.2022 — our first selfie,
+Every memory with you is priceless.
+Forever yours,
 Lalchand ❤️
 </p>
 </div>
@@ -188,11 +228,24 @@ Lalchand ❤️
 
 <script>
 
-function startSite(){
+function showYesNo(){
 document.getElementById("intro").classList.add("hidden");
+document.getElementById("yesNoPage").classList.remove("hidden");
+}
+
+function startSite(){
+document.getElementById("yesNoPage").classList.add("hidden");
 document.getElementById("giftPage").classList.remove("hidden");
 }
 
+let noBtn=document.getElementById("noBtn");
+noBtn.addEventListener("mouseover",()=>{
+noBtn.style.position="absolute";
+noBtn.style.left=Math.random()*80+"%";
+noBtn.style.top=Math.random()*80+"%";
+});
+
+/* GIFT OPEN */
 function openGift(n){
 document.getElementById("giftPage").classList.add("hidden");
 
@@ -211,14 +264,11 @@ document.getElementById("secretPage").classList.remove("hidden");
 }
 
 function wrong(){
-let r=document.getElementById("quizResult");
-r.innerHTML="Wrong daaa 😂 Try again!";
-r.classList.add("shake");
+document.getElementById("quizResult").innerHTML="Wrong da 😂 Try again!";
 }
 
 function correct(){
-let r=document.getElementById("quizResult");
-r.innerHTML="Correctttt 😍 Hubby dhaan!";
+document.getElementById("quizResult").innerHTML="Correcttt 😍";
 document.getElementById("nextBtn").classList.remove("hidden");
 launchConfetti();
 }
@@ -230,12 +280,20 @@ document.getElementById("secretPage").classList.add("hidden");
 document.getElementById("giftPage").classList.remove("hidden");
 }
 
+/* SLIDESHOW */
 let images=["photo1.JPG","photo2.JPG","photo3.JPG"];
+let memories=[
+"First Seen – 22.11.2020 ❤️",
+"Love Proposed – 20.7.2022 💍",
+"First Selfie – 5.9.2022 📸"
+];
+
 let i=0;
 
-setInterval(function(){
+setInterval(()=>{
 i=(i+1)%images.length;
 document.getElementById("slideImg").src=images[i];
+document.getElementById("memoryText").innerHTML=memories[i];
 },4000);
 
 function checkCode(){
@@ -245,7 +303,7 @@ document.getElementById("letter").classList.add("showLetter");
 launchConfetti();
 }
 else{
-alert("Wrong secret daaa 😜");
+alert("Wrong secret 😜");
 }
 }
 
@@ -261,6 +319,5 @@ setTimeout(()=>{c.remove();},3000);
 }
 
 </script>
-
 </body>
 </html>
