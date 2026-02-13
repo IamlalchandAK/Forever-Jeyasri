@@ -14,7 +14,7 @@ background:black;
 color:white;
 }
 
-/* Romantic overlay */
+/* Overlay */
 .overlay{
 position:fixed;
 top:0;
@@ -46,19 +46,7 @@ display:flex;
 opacity:1;
 }
 
-.glow{
-font-size:2.3rem;
-text-shadow:0 0 10px #ff4da6,0 0 20px #ff1a75,0 0 30px #ff66b2;
-}
-
-.zoom{
-animation:zoomIn 2s ease forwards;
-}
-@keyframes zoomIn{
-from{transform:scale(0.5);opacity:0;}
-to{transform:scale(1);opacity:1;}
-}
-
+/* Buttons */
 button{
 padding:12px 25px;
 border:none;
@@ -88,7 +76,37 @@ transition:0.4s;
 transform:scale(1.2) rotate(6deg);
 }
 
-/* Firework */
+/* White slideshow */
+#slideshow{
+background:white;
+color:black;
+}
+
+.slideshow-box{
+padding:20px;
+border-radius:20px;
+text-align:center;
+}
+
+.slideshow-box img{
+width:300px;
+border-radius:15px;
+animation:fade 4s infinite;
+}
+
+@keyframes fade{
+0%{opacity:0;transform:scale(0.9);}
+20%{opacity:1;}
+80%{opacity:1;}
+100%{opacity:0;transform:scale(1.05);}
+}
+
+.memory{
+margin-top:15px;
+font-weight:bold;
+}
+
+/* Fireworks */
 .firework{
 position:fixed;
 width:6px;
@@ -114,7 +132,7 @@ animation:explode 1s ease-out forwards;
 
 <!-- INTRO -->
 <div id="intro" class="section active">
-<h1 class="glow">I built something for you… 💌</h1>
+<h1>I built something for you… 💌</h1>
 <button onclick="go('yesno')">Click to Continue ❤️</button>
 </div>
 
@@ -145,13 +163,23 @@ animation:explode 1s ease-out forwards;
 <button id="nextBtn" style="display:none;" onclick="go('gifts')">Next ❤️</button>
 </div>
 
+<!-- SLIDESHOW (WHITE) -->
+<div id="slideshow" class="section">
+<h2>Our Memories 🤍</h2>
+<div class="slideshow-box">
+<img id="slideImg" src="photo1.JPG">
+<div id="memoryText" class="memory"></div>
+</div>
+<button onclick="go('gifts')">Back 🎁</button>
+</div>
+
 <!-- SECRET -->
 <div id="secret" class="section">
 <h2>Enter Secret Code 🔐</h2>
 <input type="text" id="secretInput">
 <p>
 Hint: The word you call me daily… just add “love you” before it 💕  
-<br>(Also… try clicking the heart 5 times 😉❤️)
+<br>(😉❤️)
 </p>
 <button onclick="checkCode()">Submit</button>
 
@@ -163,23 +191,15 @@ Hint: The word you call me daily… just add “love you” before it 💕
 <div onclick="heartClick()" style="font-size:2rem;cursor:pointer;">❤️</div>
 </div>
 
-<!-- EASTER -->
-<div id="easter" class="section">
-<h2>Only my laddu found this 😘</h2>
-<p>You clicked the heart 5 times… I knew you would ❤️</p>
-<button onclick="go('intro')">Back 🔁</button>
-</div>
-
 <!-- FINAL PROPOSAL -->
 <div id="finalProposal" class="section">
-<h1 class="zoom glow">Will You Be Mine Forever? 💍❤️</h1>
+<h1>Will You Be Mine Forever? 💍❤️</h1>
 <button onclick="finalYes()">YES FOREVER ❤️</button>
 </div>
 
 <!-- FINAL SCREEN -->
 <div id="ultimate" class="section">
-<h1 class="glow">She Said YES 😍💍</h1>
-<h2>Forever Love You Laddu ❤️</h2>
+<h1>She Said YES 😍💍</h1>
 <button onclick="restart()">Start Again 🔁</button>
 </div>
 
@@ -206,7 +226,7 @@ noBtn.style.left=Math.random()*80+"%";
 noBtn.style.top=Math.random()*80+"%";
 });
 
-/* MUSIC FADE */
+/* Music */
 function fadeIn(audio){
 audio.volume=0;
 audio.play();
@@ -228,7 +248,7 @@ go('quiz');
 fadeIn(document.getElementById("bgSong"));
 }
 if(n==2){
-go('secret'); // you can reconnect slideshow if needed
+go('slideshow');
 }
 if(n==3){
 go('secret');
@@ -240,10 +260,24 @@ function wrong(){
 document.getElementById("quizResult").innerHTML="Hehe wrong laddu";
 }
 function correct(){
-document.getElementById("quizResult").innerHTML="Correcttt maa😍";
+document.getElementById("quizResult").innerHTML="Correcttt maa 😍";
 document.getElementById("nextBtn").style.display="inline-block";
 fireworks();
 }
+
+/* Slideshow */
+let images=["photo1.JPG","photo2.JPG","photo3.JPG"];
+let memories=[
+"First Seen – 22.11.2020 ❤️",
+"Love Proposed – 20.7.2022 💍",
+"First Selfie – 5.9.2022 📸"
+];
+let i=0;
+setInterval(()=>{
+i=(i+1)%images.length;
+document.getElementById("slideImg").src=images[i];
+document.getElementById("memoryText").innerHTML=memories[i];
+},4000);
 
 /* Secret */
 let text=`From the moment you came into my life,
@@ -251,7 +285,8 @@ everything became magical. ❤️
 
 You are my happiness,
 my peace,
-my forever.by LALCHAND 💍❤️`;
+my forever,
+BY LALCHAND💍❤️`;
 
 function checkCode(){
 let code=document.getElementById("secretInput").value.toLowerCase().trim();
@@ -280,7 +315,7 @@ typing();
 
 /* Fireworks */
 function fireworks(){
-for(let i=0;i<30;i++){
+for(let i=0;i<25;i++){
 let fw=document.createElement("div");
 fw.classList.add("firework");
 fw.style.left=Math.random()*100+"vw";
@@ -291,29 +326,26 @@ setTimeout(()=>fw.remove(),1000);
 }
 }
 
-/* Easter egg */
+/* Easter */
 let clickCount=0;
 function heartClick(){
 clickCount++;
 if(clickCount>=5){
-go('easter');
+alert("Secret found 😘");
 clickCount=0;
 }
 }
 
-/* Final proposal */
+/* Final */
 function goFinal(){
 go('finalProposal');
 }
-
 function finalYes(){
 document.getElementById("bgSong").pause();
 fadeIn(document.getElementById("finalSong"));
 fireworks();
 go('ultimate');
 }
-
-/* Restart */
 function restart(){
 location.reload();
 }
