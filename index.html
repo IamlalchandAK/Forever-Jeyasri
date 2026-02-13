@@ -140,7 +140,7 @@ animation:explode 1s ease-out forwards;
 <h2>Unaku yara romba romba pudikum? 😌</h2>
 <button onclick="wrong()">Amma</button>
 <button onclick="wrong()">Appa</button>
-<button onclick="correct()">Hubby (Lalchand 😎)</button>
+<button onclick="correct()">Hubby</button>
 <p id="quizResult"></p>
 <button id="nextBtn" style="display:none;" onclick="go('gifts')">Next ❤️</button>
 </div>
@@ -237,10 +237,10 @@ go('secret');
 
 /* Quiz */
 function wrong(){
-document.getElementById("quizResult").innerHTML="Hehe wrong 😜";
+document.getElementById("quizResult").innerHTML="Hehe wrong laddu";
 }
 function correct(){
-document.getElementById("quizResult").innerHTML="Correcttt 😍";
+document.getElementById("quizResult").innerHTML="Correcttt maa😍";
 document.getElementById("nextBtn").style.display="inline-block";
 fireworks();
 }
@@ -251,7 +251,7 @@ everything became magical. ❤️
 
 You are my happiness,
 my peace,
-my forever. 💍❤️`;
+my forever.by LALCHAND 💍❤️`;
 
 function checkCode(){
 let code=document.getElementById("secretInput").value.toLowerCase().trim();
@@ -260,7 +260,7 @@ document.getElementById("letterBox").classList.remove("hidden");
 typeWriter();
 fireworks();
 }else{
-alert("Hehe wrong secret 😜");
+alert("Hehe wrong secret laddu");
 }
 }
 
