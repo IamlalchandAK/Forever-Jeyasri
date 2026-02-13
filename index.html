@@ -36,9 +36,9 @@ justify-content:center;
 align-items:center;
 flex-direction:column;
 text-align:center;
+padding:20px;
 opacity:0;
 transition:opacity 0.8s ease;
-padding:20px;
 }
 
 .section.active{
@@ -46,13 +46,11 @@ display:flex;
 opacity:1;
 }
 
-/* Glow */
 .glow{
-font-size:2.5rem;
+font-size:2.3rem;
 text-shadow:0 0 10px #ff4da6,0 0 20px #ff1a75,0 0 30px #ff66b2;
 }
 
-/* Zoom */
 .zoom{
 animation:zoomIn 2s ease forwards;
 }
@@ -73,6 +71,22 @@ color:white;
 transition:0.3s;
 }
 button:hover{transform:scale(1.1);}
+
+/* Gift layout */
+.gift-container{
+display:flex;
+gap:40px;
+flex-wrap:wrap;
+margin-top:30px;
+}
+.gift-box{
+font-size:60px;
+cursor:pointer;
+transition:0.4s;
+}
+.gift-box:hover{
+transform:scale(1.2) rotate(6deg);
+}
 
 /* Firework */
 .firework{
@@ -101,45 +115,64 @@ animation:explode 1s ease-out forwards;
 <!-- INTRO -->
 <div id="intro" class="section active">
 <h1 class="glow">I built something for you… 💌</h1>
-<button onclick="go('proposal1')">Click to Continue ❤️</button>
+<button onclick="go('yesno')">Click to Continue ❤️</button>
 </div>
 
-<!-- FIRST PROPOSAL -->
-<div id="proposal1" class="section">
-<h1 class="zoom glow">Will You Marry Me? 💍</h1>
-<button onclick="go('secret')">YES ❤️</button>
+<!-- YES NO -->
+<div id="yesno" class="section">
+<h2>Will you be mine? 😘</h2>
+<button onclick="go('gifts')">YES ❤️</button>
 <button id="noBtn">NO 🙄</button>
 </div>
 
-<!-- SECRET PAGE -->
+<!-- GIFTS -->
+<div id="gifts" class="section">
+<h2>Choose Your Surprise 🎁</h2>
+<div class="gift-container">
+<div class="gift-box" onclick="openGift(1)">🎁</div>
+<div class="gift-box" onclick="openGift(2)">🎁</div>
+<div class="gift-box" onclick="openGift(3)">🎁</div>
+</div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="section">
+<h2>Unaku yara romba romba pudikum? 😌</h2>
+<button onclick="wrong()">Amma</button>
+<button onclick="wrong()">Appa</button>
+<button onclick="correct()">Hubby (Lalchand 😎)</button>
+<p id="quizResult"></p>
+<button id="nextBtn" style="display:none;" onclick="go('gifts')">Next ❤️</button>
+</div>
+
+<!-- SECRET -->
 <div id="secret" class="section">
 <h2>Enter Secret Code 🔐</h2>
 <input type="text" id="secretInput">
 <p>
 Hint: The word you call me daily… just add “love you” before it 💕  
-<br>
-(Also… try clicking the heart 5 times 😉❤️)
+<br>(Also… try clicking the heart 5 times 😉❤️)
 </p>
 <button onclick="checkCode()">Submit</button>
 
 <div id="letterBox" class="hidden">
 <p id="typeText"></p>
-<button onclick="askExpression()">Love You Laddu ❤️</button>
+<button onclick="goFinal()">Love You Laddu ❤️</button>
 </div>
 
-<div id="hiddenHeart" onclick="heartClick()" style="font-size:2rem;cursor:pointer;">❤️</div>
+<div onclick="heartClick()" style="font-size:2rem;cursor:pointer;">❤️</div>
 </div>
 
-<!-- EASTER EGG -->
+<!-- EASTER -->
 <div id="easter" class="section">
 <h2>Only my laddu found this 😘</h2>
 <p>You clicked the heart 5 times… I knew you would ❤️</p>
-<button onclick="go('intro')">Back to Start 🔁</button>
+<button onclick="go('intro')">Back 🔁</button>
 </div>
 
-<!-- FINAL PROPOSAL AGAIN -->
+<!-- FINAL PROPOSAL -->
 <div id="finalProposal" class="section">
-<h1 class="zoom glow">Will You Marry Me Again? 💍❤️</h1>
+<h1 class="zoom glow">Will You Be Mine Forever? 💍❤️</h1>
 <button onclick="finalYes()">YES FOREVER ❤️</button>
 </div>
 
@@ -152,7 +185,7 @@ Hint: The word you call me daily… just add “love you” before it 💕
 
 <script>
 
-/* NAVIGATION */
+/* Navigation */
 function go(page){
 document.querySelectorAll('.section').forEach(s=>{
 s.classList.remove('active');
@@ -188,7 +221,31 @@ clearInterval(fade);
 },200);
 }
 
-/* SECRET */
+/* Gift open */
+function openGift(n){
+if(n==1){
+go('quiz');
+fadeIn(document.getElementById("bgSong"));
+}
+if(n==2){
+go('secret'); // you can reconnect slideshow if needed
+}
+if(n==3){
+go('secret');
+}
+}
+
+/* Quiz */
+function wrong(){
+document.getElementById("quizResult").innerHTML="Hehe wrong 😜";
+}
+function correct(){
+document.getElementById("quizResult").innerHTML="Correcttt 😍";
+document.getElementById("nextBtn").style.display="inline-block";
+fireworks();
+}
+
+/* Secret */
 let text=`From the moment you came into my life,
 everything became magical. ❤️
 
@@ -202,7 +259,6 @@ if(code=="love you laddu"){
 document.getElementById("letterBox").classList.remove("hidden");
 typeWriter();
 fireworks();
-fadeIn(document.getElementById("bgSong"));
 }else{
 alert("Hehe wrong secret 😜");
 }
@@ -222,7 +278,7 @@ setTimeout(typing,40);
 typing();
 }
 
-/* FIREWORK */
+/* Fireworks */
 function fireworks(){
 for(let i=0;i<30;i++){
 let fw=document.createElement("div");
@@ -235,26 +291,7 @@ setTimeout(()=>fw.remove(),1000);
 }
 }
 
-/* EXPRESSION */
-function askExpression(){
-alert("Ippo en expression enna irukum? 🥹😍😎❤️");
-go('finalProposal');
-}
-
-/* FINAL YES */
-function finalYes(){
-document.getElementById("bgSong").pause();
-fadeIn(document.getElementById("finalSong"));
-fireworks();
-go('ultimate');
-}
-
-/* LOOP */
-function restart(){
-location.reload();
-}
-
-/* EASTER EGG MULTI CLICK */
+/* Easter egg */
 let clickCount=0;
 function heartClick(){
 clickCount++;
@@ -262,6 +299,23 @@ if(clickCount>=5){
 go('easter');
 clickCount=0;
 }
+}
+
+/* Final proposal */
+function goFinal(){
+go('finalProposal');
+}
+
+function finalYes(){
+document.getElementById("bgSong").pause();
+fadeIn(document.getElementById("finalSong"));
+fireworks();
+go('ultimate');
+}
+
+/* Restart */
+function restart(){
+location.reload();
 }
 
 </script>
