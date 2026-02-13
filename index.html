@@ -12,6 +12,7 @@ font-family:'Segoe UI',sans-serif;
 overflow:hidden;
 }
 
+/* SECTIONS */
 .section{
 display:none;
 position:fixed;
@@ -24,50 +25,37 @@ flex-direction:column;
 text-align:center;
 padding:20px;
 box-sizing:border-box;
+opacity:0;
+transition:opacity 0.6s ease;
+}
+.section.active{
+display:flex;
+opacity:1;
 }
 
-/* BLACK INTRO */
+/* INTRO */
 #intro{
 background:black;
 color:white;
-display:flex;
 }
 
-button{
-padding:12px 25px;
-border:none;
-border-radius:30px;
-cursor:pointer;
-font-size:1rem;
-margin:10px;
-transition:0.3s;
-}
-
-.red{background:#ff1744;color:white;}
-.white{background:white;color:black;}
-
-button:hover{transform:scale(1.05);}
-
-/* YES NO PAGE */
+/* YES NO */
 #yesno{
 background:linear-gradient(135deg,#ff9aa2,#ff4e8c);
 color:white;
-display:none;
 }
 
-/* GIFT PAGE */
+/* GIFTS */
 #gifts{
 background:linear-gradient(135deg,#ff9aa2,#ff4e8c);
 color:white;
-display:none;
 }
 
 .gift-container{
 display:flex;
-justify-content:center;
 gap:40px;
-margin-top:40px;
 flex-wrap:wrap;
+margin-top:40px;
 }
 
 .gift-box{
@@ -78,20 +66,10 @@ transition:0.4s;
 .gift-box:hover{
 transform:scale(1.2) rotate(6deg);
 }
-.gift-box p{
-font-size:1rem;
-font-weight:bold;
-}
 
 /* QUIZ */
 #quiz{
 background:#ffe6f0;
-color:black;
-display:none;
-}
-
-.options button{
-background:white;
 color:black;
 }
 
@@ -99,7 +77,6 @@ color:black;
 #slideshow{
 background:black;
 color:white;
-display:none;
 }
 
 .slideshow-box{
@@ -123,48 +100,60 @@ animation:fade 4s infinite;
 
 .memory{
 margin-top:15px;
-font-size:1rem;
 }
 
-/* SECRET */
+/* SECRET PAGE HEARTBEAT */
 #secret{
 background:radial-gradient(circle,#ff4d6d,#990033);
 color:white;
-display:none;
+animation:heartbeat 1.2s infinite;
 }
 
-input{
-padding:10px;
-border-radius:10px;
-border:none;
+@keyframes heartbeat{
+0%{transform:scale(1);}
+50%{transform:scale(1.02);}
+100%{transform:scale(1);}
 }
 
+/* LETTER */
 .letter{
 background:white;
 color:black;
 width:80%;
-margin:30px auto;
+margin-top:30px;
 padding:20px;
 border-radius:20px;
-opacity:0;
-transition:1s;
+min-height:120px;
+white-space:pre-line;
 }
 
-.showLetter{
-opacity:1;
+/* BUTTONS */
+button{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+cursor:pointer;
+font-size:1rem;
+margin:10px;
+transition:0.3s;
 }
+.red{background:#ff1744;color:white;}
+.white{background:white;color:black;}
+button:hover{transform:scale(1.05);}
 
-/* CONFETTI */
-.confetti{
+/* FIREWORK */
+.firework{
 position:fixed;
-width:10px;
-height:10px;
-top:-10px;
-animation:fall 3s linear infinite;
+width:6px;
+height:6px;
+background:white;
+border-radius:50%;
+animation:explode 1s ease-out forwards;
 }
 
-@keyframes fall{
-to{transform:translateY(100vh) rotate(720deg);}
+@keyframes explode{
+0%{transform:scale(1);opacity:1;}
+100%{transform:scale(20);opacity:0;}
 }
 
 /* RESPONSIVE */
@@ -180,7 +169,7 @@ to{transform:translateY(100vh) rotate(720deg);}
 <audio id="bgSong" src="song.mp3"></audio>
 
 <!-- INTRO -->
-<div id="intro" class="section">
+<div id="intro" class="section active">
 <h1>“I built something for you…” 💌</h1>
 <button class="red" onclick="go('yesno')">Click to Continue ❤️</button>
 </div>
@@ -196,20 +185,18 @@ to{transform:translateY(100vh) rotate(720deg);}
 <div id="gifts" class="section">
 <h2>Choose Your Surprise 🎁</h2>
 <div class="gift-container">
-<div class="gift-box" onclick="openGift(1)">🎁<p>Gift 1</p></div>
-<div class="gift-box" onclick="openGift(2)">🎁<p>Gift 2</p></div>
-<div class="gift-box" onclick="openGift(3)">🎁<p>Gift 3</p></div>
+<div class="gift-box" onclick="openGift(1)">🎁</div>
+<div class="gift-box" onclick="openGift(2)">🎁</div>
+<div class="gift-box" onclick="openGift(3)">🎁</div>
 </div>
 </div>
 
 <!-- QUIZ -->
 <div id="quiz" class="section">
 <h2>Unaku yara romba romba pudikum? 😌</h2>
-<div class="options">
 <button onclick="wrong()">Amma</button>
 <button onclick="wrong()">Appa</button>
-<button onclick="correct()">Hubby</button>
-</div>
+<button onclick="correct()">Hubby (Lalchand 😎)</button>
 <p id="quizResult"></p>
 <button id="nextBtn" class="red" style="display:none;" onclick="go('gifts')">Next ❤️</button>
 </div>
@@ -219,7 +206,7 @@ to{transform:translateY(100vh) rotate(720deg);}
 <h2>Our Memories 🖤</h2>
 <div class="slideshow-box">
 <img id="slideImg" src="photo1.JPG">
-<div class="memory" id="memoryText"></div>
+<div id="memoryText" class="memory"></div>
 </div>
 <button class="red" onclick="go('gifts')">Back 🎁</button>
 </div>
@@ -227,46 +214,28 @@ to{transform:translateY(100vh) rotate(720deg);}
 <!-- SECRET -->
 <div id="secret" class="section">
 <h2>Enter Secret Code 🔐</h2>
-<input type="text" id="secretInput">
+<input type="text" id="secretInput" placeholder="Type here...">
+<p style="opacity:0.8;">
+Hint: The word you call me daily… just add “love you” before it 💕
+</p>
 <button class="red" onclick="checkCode()">Submit</button>
 
-<div id="letter" class="letter">
-<h3>My Love 💖</h3>
-<p>
-From the moment you came into my life,  
-everything started feeling more beautiful. ❤️  
-
-Your smile is my peace,  
-your voice is my comfort,  
-and your love is my biggest strength.  
-
-You are not just someone I love…  
-you are my safe place, my happiness,  
-and the future I dream about every day. 💭💖  
-
-No matter what happens in life,  
-I will always choose you.  
-Every single time.  
-
-You are my today,  
-my tomorrow,  
-and my forever. 💍❤️  
-
-Forever yours,  
-Lalchand 💖
-
-</p>
-</div>
-
-<button class="red" onclick="go('gifts')">Back 🎁</button>
+<div id="letter" class="letter"></div>
 </div>
 
 <script>
 
-/* PAGE NAVIGATION */
+/* PAGE NAV WITH FADE */
 function go(page){
+document.querySelectorAll('.section').forEach(sec=>{
+sec.classList.remove('active');
+});
+setTimeout(()=>{
 document.querySelectorAll('.section').forEach(sec=>sec.style.display='none');
-document.getElementById(page).style.display='flex';
+let target=document.getElementById(page);
+target.style.display='flex';
+setTimeout(()=>target.classList.add('active'),50);
+},300);
 }
 
 /* NO ESCAPE */
@@ -289,12 +258,12 @@ if(n==3){ go('secret'); }
 
 /* QUIZ */
 function wrong(){
-document.getElementById("quizResult").innerHTML="Wrong da 😂 Try again!";
+document.getElementById("quizResult").innerHTML="Hehe wrong da 😜";
 }
 function correct(){
 document.getElementById("quizResult").innerHTML="Correcttt 😍";
 document.getElementById("nextBtn").style.display="inline-block";
-launchConfetti();
+fireworks();
 }
 
 /* SLIDESHOW */
@@ -304,7 +273,6 @@ let memories=[
 "Love Proposed – 20.7.2022 💍",
 "First Selfie – 5.9.2022 📸"
 ];
-
 let i=0;
 setInterval(()=>{
 i=(i+1)%images.length;
@@ -312,27 +280,55 @@ document.getElementById("slideImg").src=images[i];
 document.getElementById("memoryText").innerHTML=memories[i];
 },4000);
 
-/* SECRET */
+/* TYPEWRITER LETTER */
+let text=`From the moment you came into my life,
+everything started feeling more beautiful. ❤️
+
+Your smile is my peace,
+your voice is my comfort,
+and your love is my biggest strength.
+
+You are my today,
+my tomorrow,
+and my forever. 💍❤️
+
+Forever yours,
+Lalchand 💖`;
+
 function checkCode(){
-let code=document.getElementById("secretInput(nama adikadi soli kupidura wordoda love you add panniko)").value.toLowerCase();
+let code=document.getElementById("secretInput").value.toLowerCase().trim();
 if(code=="love you laddu"){
-document.getElementById("letter").classList.add("showLetter");
-launchConfetti();
-}
-else{
-alert("Wrong secret 😜");
+typeWriter();
+fireworks();
+}else{
+alert("Hehe wrong secret 😜");
 }
 }
 
-/* CONFETTI */
-function launchConfetti(){
-for(let i=0;i<60;i++){
-let c=document.createElement("div");
-c.classList.add("confetti");
-c.style.left=Math.random()*100+"vw";
-c.style.background=`hsl(${Math.random()*360},100%,50%)`;
-document.body.appendChild(c);
-setTimeout(()=>{c.remove();},3000);
+function typeWriter(){
+let letter=document.getElementById("letter");
+letter.innerHTML="";
+let i=0;
+function typing(){
+if(i<text.length){
+letter.innerHTML+=text.charAt(i);
+i++;
+setTimeout(typing,30);
+}
+}
+typing();
+}
+
+/* FIREWORKS */
+function fireworks(){
+for(let i=0;i<20;i++){
+let fw=document.createElement("div");
+fw.classList.add("firework");
+fw.style.left=Math.random()*100+"vw";
+fw.style.top=Math.random()*100+"vh";
+fw.style.background=`hsl(${Math.random()*360},100%,50%)`;
+document.body.appendChild(fw);
+setTimeout(()=>fw.remove(),1000);
 }
 }
 
