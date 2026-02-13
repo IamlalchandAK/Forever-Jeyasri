@@ -10,6 +10,16 @@ body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
 overflow:hidden;
+background:black;
+color:white;
+}
+
+/* PARTICLES BACKGROUND */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
 }
 
 /* SECTIONS */
@@ -26,108 +36,27 @@ text-align:center;
 padding:20px;
 box-sizing:border-box;
 opacity:0;
-transition:opacity 0.6s ease;
+transition:opacity 0.8s ease;
 }
 .section.active{
 display:flex;
 opacity:1;
 }
 
-/* INTRO */
-#intro{
-background:black;
-color:white;
+/* GLOW TEXT */
+.glow{
+font-size:2.5rem;
+text-shadow:0 0 10px #ff4da6,0 0 20px #ff1a75,0 0 30px #ff66b2;
 }
 
-/* YES NO */
-#yesno{
-background:linear-gradient(135deg,#ff9aa2,#ff4e8c);
-color:white;
-}
-
-/* GIFTS */
-#gifts{
-background:linear-gradient(135deg,#ff9aa2,#ff4e8c);
-color:white;
-}
-
-.gift-container{
-display:flex;
-gap:40px;
-flex-wrap:wrap;
-margin-top:40px;
-}
-
-.gift-box{
-font-size:60px;
-cursor:pointer;
-transition:0.4s;
-}
-.gift-box:hover{
-transform:scale(1.2) rotate(6deg);
-}
-
-/* QUIZ */
-#quiz{
-background:#ffe6f0;
-color:black;
-}
-
-/* SLIDESHOW */
-#slideshow{
-background:black;
-color:white;
-}
-
-.slideshow-box{
-background:black;
-padding:30px;
-border-radius:20px;
-}
-
-.slideshow-box img{
-width:300px;
-border-radius:20px;
-animation:fade 4s infinite;
-}
-
-@keyframes fade{
-0%{opacity:0;transform:scale(0.9);}
-20%{opacity:1;}
-80%{opacity:1;}
-100%{opacity:0;transform:scale(1.05);}
-}
-
-.memory{
-margin-top:15px;
-}
-
-/* SECRET PAGE HEARTBEAT */
-#secret{
-background:radial-gradient(circle,#ff4d6d,#990033);
-color:white;
-animation:heartbeat 1.2s infinite;
-}
-
+/* HEARTBEAT */
 @keyframes heartbeat{
 0%{transform:scale(1);}
-50%{transform:scale(1.02);}
+50%{transform:scale(1.03);}
 100%{transform:scale(1);}
 }
 
-/* LETTER */
-.letter{
-background:white;
-color:black;
-width:80%;
-margin-top:30px;
-padding:20px;
-border-radius:20px;
-min-height:120px;
-white-space:pre-line;
-}
-
-/* BUTTONS */
+/* BUTTON */
 button{
 padding:12px 25px;
 border:none;
@@ -135,60 +64,81 @@ border-radius:30px;
 cursor:pointer;
 font-size:1rem;
 margin:10px;
+background:#ff1744;
+color:white;
 transition:0.3s;
 }
-.red{background:#ff1744;color:white;}
-.white{background:white;color:black;}
-button:hover{transform:scale(1.05);}
+button:hover{transform:scale(1.1);}
 
 /* FIREWORK */
 .firework{
 position:fixed;
 width:6px;
 height:6px;
-background:white;
 border-radius:50%;
 animation:explode 1s ease-out forwards;
 }
-
 @keyframes explode{
 0%{transform:scale(1);opacity:1;}
 100%{transform:scale(20);opacity:0;}
 }
 
-/* RESPONSIVE */
-@media(max-width:600px){
-.slideshow-box img{width:90%;}
-.gift-box{font-size:50px;}
+/* SLIDESHOW */
+.slideshow img{
+width:300px;
+border-radius:20px;
+animation:fade 4s infinite;
+}
+@keyframes fade{
+0%{opacity:0;transform:scale(0.9);}
+20%{opacity:1;}
+80%{opacity:1;}
+100%{opacity:0;transform:scale(1.05);}
+}
+
+/* LETTER */
+.letter{
+background:white;
+color:black;
+padding:20px;
+border-radius:20px;
+width:80%;
+min-height:120px;
+white-space:pre-line;
+}
+
+/* COUNTDOWN */
+.countdown{
+font-size:3rem;
+margin:20px;
 }
 </style>
 </head>
 
 <body>
 
+<canvas id="particles"></canvas>
 <audio id="bgSong" src="song.mp3"></audio>
 
 <!-- INTRO -->
 <div id="intro" class="section active">
-<h1>“I built something for you…” 💌</h1>
-<button class="red" onclick="go('yesno')">Click to Continue ❤️</button>
+<h1 class="glow">I built something for you… 💌</h1>
+<button onclick="go('yesno')">Click to Continue ❤️</button>
 </div>
 
 <!-- YES NO -->
 <div id="yesno" class="section">
 <h2>Will you be mine? 😘</h2>
-<button class="red" onclick="go('gifts')">YES ❤️</button>
-<button class="white" id="noBtn">NO 🙄</button>
+<button onclick="go('gifts')">YES ❤️</button>
+<button id="noBtn">NO 🙄</button>
 </div>
 
 <!-- GIFTS -->
 <div id="gifts" class="section">
 <h2>Choose Your Surprise 🎁</h2>
-<div class="gift-container">
-<div class="gift-box" onclick="openGift(1)">🎁</div>
-<div class="gift-box" onclick="openGift(2)">🎁</div>
-<div class="gift-box" onclick="openGift(3)">🎁</div>
-</div>
+<button onclick="openGift(1)">🎁 Gift 1</button>
+<button onclick="openGift(2)">🎁 Gift 2</button>
+<button onclick="openGift(3)">🎁 Gift 3</button>
 </div>
 
 <!-- QUIZ -->
@@ -196,46 +146,44 @@ animation:explode 1s ease-out forwards;
 <h2>Unaku yara romba romba pudikum? 😌</h2>
 <button onclick="wrong()">Amma</button>
 <button onclick="wrong()">Appa</button>
-<button onclick="correct()">Hubby (Lalchand 😎)</button>
+<button onclick="correct()">Hubby</button>
 <p id="quizResult"></p>
-<button id="nextBtn" class="red" style="display:none;" onclick="go('gifts')">Next ❤️</button>
+<button id="nextBtn" style="display:none;" onclick="go('gifts')">Next ❤️</button>
 </div>
 
 <!-- SLIDESHOW -->
 <div id="slideshow" class="section">
 <h2>Our Memories 🖤</h2>
-<div class="slideshow-box">
+<div class="slideshow">
 <img id="slideImg" src="photo1.JPG">
-<div id="memoryText" class="memory"></div>
+<div id="memoryText"></div>
 </div>
-<button class="red" onclick="go('gifts')">Back 🎁</button>
+<button onclick="go('gifts')">Back 🎁</button>
 </div>
 
 <!-- SECRET -->
-<div id="secret" class="section">
+<div id="secret" class="section" style="animation:heartbeat 1.2s infinite;">
 <h2>Enter Secret Code 🔐</h2>
-<input type="text" id="secretInput" placeholder="Type here...">
-<p style="opacity:0.8;">
-Hint: The word you call me daily… just add “love you” before it 💕
-</p>
-<button class="red" onclick="checkCode()">Submit</button>
-
+<input type="text" id="secretInput">
+<p>Hint: The word you call me daily… just add “love you” before it 💕</p>
+<button onclick="checkCode()">Submit</button>
 <div id="letter" class="letter"></div>
+<button id="loopBtn" style="display:none;" onclick="restart()">Love You Laddu ❤️</button>
 </div>
 
 <script>
 
-/* PAGE NAV WITH FADE */
+/* PAGE NAV */
 function go(page){
-document.querySelectorAll('.section').forEach(sec=>{
-sec.classList.remove('active');
+document.querySelectorAll('.section').forEach(s=>{
+s.classList.remove('active');
 });
 setTimeout(()=>{
-document.querySelectorAll('.section').forEach(sec=>sec.style.display='none');
+document.querySelectorAll('.section').forEach(s=>s.style.display='none');
 let target=document.getElementById(page);
 target.style.display='flex';
 setTimeout(()=>target.classList.add('active'),50);
-},300);
+},400);
 }
 
 /* NO ESCAPE */
@@ -246,11 +194,27 @@ noBtn.style.left=Math.random()*80+"%";
 noBtn.style.top=Math.random()*80+"%";
 });
 
-/* GIFT OPEN */
+/* MUSIC FADE IN */
+function fadeInMusic(){
+let audio=document.getElementById("bgSong");
+audio.volume=0;
+audio.play();
+let vol=0;
+let fade=setInterval(()=>{
+if(vol<1){
+vol+=0.05;
+audio.volume=vol;
+}else{
+clearInterval(fade);
+}
+},200);
+}
+
+/* GIFT */
 function openGift(n){
 if(n==1){
 go('quiz');
-document.getElementById("bgSong").play();
+fadeInMusic();
 }
 if(n==2){ go('slideshow'); }
 if(n==3){ go('secret'); }
@@ -258,10 +222,10 @@ if(n==3){ go('secret'); }
 
 /* QUIZ */
 function wrong(){
-document.getElementById("quizResult").innerHTML="Hehe wrong da 😜";
+document.getElementById("quizResult").innerHTML="Hehe wrong laddu";
 }
 function correct(){
-document.getElementById("quizResult").innerHTML="Correcttt 😍";
+document.getElementById("quizResult").innerHTML="Correcttt maa😍";
 document.getElementById("nextBtn").style.display="inline-block";
 fireworks();
 }
@@ -280,48 +244,63 @@ document.getElementById("slideImg").src=images[i];
 document.getElementById("memoryText").innerHTML=memories[i];
 },4000);
 
-/* TYPEWRITER LETTER */
+/* TYPEWRITER */
 let text=`From the moment you came into my life,
-everything started feeling more beautiful. ❤️
+everything became beautiful. ❤️
 
-Your smile is my peace,
-your voice is my comfort,
-and your love is my biggest strength.
-
-You are my today,
-my tomorrow,
-and my forever. 💍❤️
-
-Forever yours,
-Lalchand 💖`;
+You are my peace,
+my happiness,
+my forever. 💍❤️`;
 
 function checkCode(){
 let code=document.getElementById("secretInput").value.toLowerCase().trim();
 if(code=="love you laddu"){
-typeWriter();
-fireworks();
+countdown();
 }else{
-alert("Hehe wrong secret 😜");
+alert("Hehe wrong secret laddu");
 }
 }
 
+/* COUNTDOWN */
+function countdown(){
+let secret=document.getElementById("secret");
+secret.innerHTML="<div class='countdown' id='count'>3</div>";
+let c=3;
+let timer=setInterval(()=>{
+c--;
+if(c>0){
+document.getElementById("count").innerText=c;
+}else{
+clearInterval(timer);
+showLetter();
+}
+},1000);
+}
+
+function showLetter(){
+let secret=document.getElementById("secret");
+secret.innerHTML="<div class='letter' id='letter'></div><button id='loopBtn' onclick='restart()'>Love You Laddu ❤️</button>";
+typeWriter();
+fireworks();
+}
+
+/* TYPE EFFECT */
 function typeWriter(){
 let letter=document.getElementById("letter");
-letter.innerHTML="";
 let i=0;
 function typing(){
 if(i<text.length){
 letter.innerHTML+=text.charAt(i);
 i++;
-setTimeout(typing,30);
+setTimeout(typing,40);
 }
 }
 typing();
 }
 
-/* FIREWORKS */
+/* FIREWORK */
 function fireworks(){
-for(let i=0;i<20;i++){
+for(let i=0;i<30;i++){
 let fw=document.createElement("div");
 fw.classList.add("firework");
 fw.style.left=Math.random()*100+"vw";
@@ -331,6 +310,43 @@ document.body.appendChild(fw);
 setTimeout(()=>fw.remove(),1000);
 }
 }
+
+/* LOOP */
+function restart(){
+location.reload();
+}
+
+/* PARTICLES */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+let particles=[];
+for(let i=0;i<100;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+d:Math.random()*1
+});
+}
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="white";
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
+ctx.fill();
+});
+update();
+}
+function update(){
+particles.forEach(p=>{
+p.y+=p.d;
+if(p.y>canvas.height){p.y=0;}
+});
+}
+setInterval(draw,33);
 
 </script>
 
