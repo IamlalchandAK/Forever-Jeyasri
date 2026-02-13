@@ -14,15 +14,18 @@ background:black;
 color:white;
 }
 
-/* PARTICLES BACKGROUND */
-canvas{
+/* Romantic overlay */
+.overlay{
 position:fixed;
 top:0;
 left:0;
+width:100%;
+height:100%;
+background:radial-gradient(circle at center, rgba(255,105,180,0.25), rgba(0,0,0,0.95));
 z-index:-1;
 }
 
-/* SECTIONS */
+/* Sections */
 .section{
 display:none;
 position:fixed;
@@ -33,30 +36,31 @@ justify-content:center;
 align-items:center;
 flex-direction:column;
 text-align:center;
-padding:20px;
-box-sizing:border-box;
 opacity:0;
 transition:opacity 0.8s ease;
+padding:20px;
 }
+
 .section.active{
 display:flex;
 opacity:1;
 }
 
-/* GLOW TEXT */
+/* Glow */
 .glow{
 font-size:2.5rem;
 text-shadow:0 0 10px #ff4da6,0 0 20px #ff1a75,0 0 30px #ff66b2;
 }
 
-/* HEARTBEAT */
-@keyframes heartbeat{
-0%{transform:scale(1);}
-50%{transform:scale(1.03);}
-100%{transform:scale(1);}
+/* Zoom */
+.zoom{
+animation:zoomIn 2s ease forwards;
+}
+@keyframes zoomIn{
+from{transform:scale(0.5);opacity:0;}
+to{transform:scale(1);opacity:1;}
 }
 
-/* BUTTON */
 button{
 padding:12px 25px;
 border:none;
@@ -70,7 +74,7 @@ transition:0.3s;
 }
 button:hover{transform:scale(1.1);}
 
-/* FIREWORK */
+/* Firework */
 .firework{
 position:fixed;
 width:6px;
@@ -83,97 +87,72 @@ animation:explode 1s ease-out forwards;
 100%{transform:scale(20);opacity:0;}
 }
 
-/* SLIDESHOW */
-.slideshow img{
-width:300px;
-border-radius:20px;
-animation:fade 4s infinite;
-}
-@keyframes fade{
-0%{opacity:0;transform:scale(0.9);}
-20%{opacity:1;}
-80%{opacity:1;}
-100%{opacity:0;transform:scale(1.05);}
-}
-
-/* LETTER */
-.letter{
-background:white;
-color:black;
-padding:20px;
-border-radius:20px;
-width:80%;
-min-height:120px;
-white-space:pre-line;
-}
-
-/* COUNTDOWN */
-.countdown{
-font-size:3rem;
-margin:20px;
-}
+.hidden{display:none;}
 </style>
 </head>
 
 <body>
 
-<canvas id="particles"></canvas>
+<div class="overlay"></div>
+
 <audio id="bgSong" src="song.mp3"></audio>
+<audio id="finalSong" src="song2.mp3"></audio>
 
 <!-- INTRO -->
 <div id="intro" class="section active">
 <h1 class="glow">I built something for you… 💌</h1>
-<button onclick="go('yesno')">Click to Continue ❤️</button>
+<button onclick="go('proposal1')">Click to Continue ❤️</button>
 </div>
 
-<!-- YES NO -->
-<div id="yesno" class="section">
-<h2>Will you be mine? 😘</h2>
-<button onclick="go('gifts')">YES ❤️</button>
+<!-- FIRST PROPOSAL -->
+<div id="proposal1" class="section">
+<h1 class="zoom glow">Will You Marry Me? 💍</h1>
+<button onclick="go('secret')">YES ❤️</button>
 <button id="noBtn">NO 🙄</button>
 </div>
 
-<!-- GIFTS -->
-<div id="gifts" class="section">
-<h2>Choose Your Surprise 🎁</h2>
-<button onclick="openGift(1)">🎁 Gift 1</button>
-<button onclick="openGift(2)">🎁 Gift 2</button>
-<button onclick="openGift(3)">🎁 Gift 3</button>
-</div>
-
-<!-- QUIZ -->
-<div id="quiz" class="section">
-<h2>Unaku yara romba romba pudikum? 😌</h2>
-<button onclick="wrong()">Amma</button>
-<button onclick="wrong()">Appa</button>
-<button onclick="correct()">Hubby</button>
-<p id="quizResult"></p>
-<button id="nextBtn" style="display:none;" onclick="go('gifts')">Next ❤️</button>
-</div>
-
-<!-- SLIDESHOW -->
-<div id="slideshow" class="section">
-<h2>Our Memories 🖤</h2>
-<div class="slideshow">
-<img id="slideImg" src="photo1.JPG">
-<div id="memoryText"></div>
-</div>
-<button onclick="go('gifts')">Back 🎁</button>
-</div>
-
-<!-- SECRET -->
-<div id="secret" class="section" style="animation:heartbeat 1.2s infinite;">
+<!-- SECRET PAGE -->
+<div id="secret" class="section">
 <h2>Enter Secret Code 🔐</h2>
 <input type="text" id="secretInput">
-<p>Hint: The word you call me daily… just add “love you” before it 💕</p>
+<p>
+Hint: The word you call me daily… just add “love you” before it 💕  
+<br>
+(Also… try clicking the heart 5 times 😉❤️)
+</p>
 <button onclick="checkCode()">Submit</button>
-<div id="letter" class="letter"></div>
-<button id="loopBtn" style="display:none;" onclick="restart()">Love You Laddu ❤️</button>
+
+<div id="letterBox" class="hidden">
+<p id="typeText"></p>
+<button onclick="askExpression()">Love You Laddu ❤️</button>
+</div>
+
+<div id="hiddenHeart" onclick="heartClick()" style="font-size:2rem;cursor:pointer;">❤️</div>
+</div>
+
+<!-- EASTER EGG -->
+<div id="easter" class="section">
+<h2>Only my laddu found this 😘</h2>
+<p>You clicked the heart 5 times… I knew you would ❤️</p>
+<button onclick="go('intro')">Back to Start 🔁</button>
+</div>
+
+<!-- FINAL PROPOSAL AGAIN -->
+<div id="finalProposal" class="section">
+<h1 class="zoom glow">Will You Marry Me Again? 💍❤️</h1>
+<button onclick="finalYes()">YES FOREVER ❤️</button>
+</div>
+
+<!-- FINAL SCREEN -->
+<div id="ultimate" class="section">
+<h1 class="glow">She Said YES 😍💍</h1>
+<h2>Forever Love You Laddu ❤️</h2>
+<button onclick="restart()">Start Again 🔁</button>
 </div>
 
 <script>
 
-/* PAGE NAV */
+/* NAVIGATION */
 function go(page){
 document.querySelectorAll('.section').forEach(s=>{
 s.classList.remove('active');
@@ -194,9 +173,8 @@ noBtn.style.left=Math.random()*80+"%";
 noBtn.style.top=Math.random()*80+"%";
 });
 
-/* MUSIC FADE IN */
-function fadeInMusic(){
-let audio=document.getElementById("bgSong");
+/* MUSIC FADE */
+function fadeIn(audio){
 audio.volume=0;
 audio.play();
 let vol=0;
@@ -210,87 +188,33 @@ clearInterval(fade);
 },200);
 }
 
-/* GIFT */
-function openGift(n){
-if(n==1){
-go('quiz');
-fadeInMusic();
-}
-if(n==2){ go('slideshow'); }
-if(n==3){ go('secret'); }
-}
-
-/* QUIZ */
-function wrong(){
-document.getElementById("quizResult").innerHTML="Hehe wrong laddu";
-}
-function correct(){
-document.getElementById("quizResult").innerHTML="Correcttt maa😍";
-document.getElementById("nextBtn").style.display="inline-block";
-fireworks();
-}
-
-/* SLIDESHOW */
-let images=["photo1.JPG","photo2.JPG","photo3.JPG"];
-let memories=[
-"First Seen – 22.11.2020 ❤️",
-"Love Proposed – 20.7.2022 💍",
-"First Selfie – 5.9.2022 📸"
-];
-let i=0;
-setInterval(()=>{
-i=(i+1)%images.length;
-document.getElementById("slideImg").src=images[i];
-document.getElementById("memoryText").innerHTML=memories[i];
-},4000);
-
-/* TYPEWRITER */
+/* SECRET */
 let text=`From the moment you came into my life,
-everything became beautiful. ❤️
+everything became magical. ❤️
 
-You are my peace,
-my happiness,
+You are my happiness,
+my peace,
 my forever. 💍❤️`;
 
 function checkCode(){
 let code=document.getElementById("secretInput").value.toLowerCase().trim();
 if(code=="love you laddu"){
-countdown();
-}else{
-alert("Hehe wrong secret laddu");
-}
-}
-
-/* COUNTDOWN */
-function countdown(){
-let secret=document.getElementById("secret");
-secret.innerHTML="<div class='countdown' id='count'>3</div>";
-let c=3;
-let timer=setInterval(()=>{
-c--;
-if(c>0){
-document.getElementById("count").innerText=c;
-}else{
-clearInterval(timer);
-showLetter();
-}
-},1000);
-}
-
-function showLetter(){
-let secret=document.getElementById("secret");
-secret.innerHTML="<div class='letter' id='letter'></div><button id='loopBtn' onclick='restart()'>Love You Laddu ❤️</button>";
+document.getElementById("letterBox").classList.remove("hidden");
 typeWriter();
 fireworks();
+fadeIn(document.getElementById("bgSong"));
+}else{
+alert("Hehe wrong secret 😜");
+}
 }
 
-/* TYPE EFFECT */
 function typeWriter(){
-let letter=document.getElementById("letter");
 let i=0;
+let target=document.getElementById("typeText");
+target.innerHTML="";
 function typing(){
 if(i<text.length){
-letter.innerHTML+=text.charAt(i);
+target.innerHTML+=text.charAt(i);
 i++;
 setTimeout(typing,40);
 }
@@ -311,42 +235,34 @@ setTimeout(()=>fw.remove(),1000);
 }
 }
 
+/* EXPRESSION */
+function askExpression(){
+alert("Ippo en expression enna irukum? 🥹😍😎❤️");
+go('finalProposal');
+}
+
+/* FINAL YES */
+function finalYes(){
+document.getElementById("bgSong").pause();
+fadeIn(document.getElementById("finalSong"));
+fireworks();
+go('ultimate');
+}
+
 /* LOOP */
 function restart(){
 location.reload();
 }
 
-/* PARTICLES */
-const canvas=document.getElementById("particles");
-const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-let particles=[];
-for(let i=0;i<100;i++){
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:Math.random()*2,
-d:Math.random()*1
-});
+/* EASTER EGG MULTI CLICK */
+let clickCount=0;
+function heartClick(){
+clickCount++;
+if(clickCount>=5){
+go('easter');
+clickCount=0;
 }
-function draw(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-ctx.fillStyle="white";
-particles.forEach(p=>{
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
-ctx.fill();
-});
-update();
 }
-function update(){
-particles.forEach(p=>{
-p.y+=p.d;
-if(p.y>canvas.height){p.y=0;}
-});
-}
-setInterval(draw,33);
 
 </script>
 
